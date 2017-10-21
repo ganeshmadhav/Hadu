@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html ng-app="haduApp">
+    <head>
+       <link rel="stylesheet" href="hadu.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="https://use.fontawesome.com/efb0f51933.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="hadu.js"></script>
+    </head>
+    <body ng-controller="profiledata" onload="openTab(event, 'Albums')">
+      <!--  <form action="">-->
+            <div class="row">
+            <div class="col-md-12" style="text-align: center;">
+                <label class="title">   &#3257;&#3262;-Hadu-&#3233;&#3265; </label>
+            </div>
+               
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab">
+                  <!--<button class="tablinks" onclick="openTab(event, 'Songs')">Songs</button>-->
+                  <button class="tablinks" onclick="openTab(event, 'Albums')">Albums</button>
+                  <button class="tablinks" onclick="openTab(event, 'Artists')">Artists</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+               <!-- <div id="Songs" class="tabcontent" >
+                    <table class="table table_class" id="tableDiv" style="min-width:600px;">
+                                        <tr>
+                                          <th>Party</th>
+                                          <th>Name</th>
+                                          <th>Chamber</th>
+                                          <th>District</th>
+                                          <th>State</th>
+                                          <th></th>
+                                       </tr>
+                    </table>
+                </div>-->
+
+                <div id="Albums" class="tabcontent container carousel slid" data-ride="carousel" data-interval="false">
+                    <div class="carousel-inner"> 
+                          <div class="carousel-item active" id="tabbing_album">
+                            <div class="header_subtitle well well-sm">
+                                <h4 id="lbH" style="display:inline-block;">Album</h4>
+                                <input type="text" id="search_id" ng-model="searchAlbum" class="search_box" placeholder="Search"  ng-keyup="$event.keyCode == 13 ? changeAlbum() : null"/>
+                                <button type="submit" value="Submit" class="btn btn-primary search_box" ng-click="changeAlbum()">Search</button>              
+                            </div>
+
+                            <table class="table table_class" id="tableDiv" style="min-width:600px;">
+                                <tr>
+                                  <th>Album</th>
+                                  <th>Artist</th>
+                                  <th>Style</th>
+                                  <th>Genre</th>
+                                  <th>Release Date</th>
+                                    <th>Image</th>
+                                  <th></th>
+                               </tr>
+                                 <tr ng-repeat="album in albumdata.data.album | orderBy: '-intYearReleased'">
+                                    <td ng-click="elementClick(album.idAlbum)" class="carousel-control details" href="#Albums"  value="View Details" role="button" data-slide="next">{{album.strAlbum}}</td>
+                                    <td>{{album.strArtist}}</td>
+                                    <td>{{album.strStyle}}</td>
+                                    <td>{{album.strGenre}}</td>
+                                    <td>{{album.intYearReleased}}</td>
+                                     <td><img src="{{album.strAlbumThumb}}" style="height: 50px;" alt="..."/></td>
+                                </tr>
+                            </table>
+                        </div>
+                            <div class="carousel-item">
+                             <div class="row">
+                                 <div class="col-md-3">
+                                     <button id="back_Bt" href="#Albums" style="border: 1px solid;" class="btn btn-outline-danger back_button carousel-control btn_look bghover" ng-click="back()" role="button" data-slide="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+                                 </div>
+                                 <div class="col-md-9">
+                                     <h1> Album: {{albuminfo.data.album[0].strAlbum}}</h1>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-3">
+                                     <div class="row" >
+                                        <img src="{{albuminfo.data.album[0].strAlbumThumb}}" style="height: 250px;" alt="..."/>
+                                     </div>
+                                         <div class="row">
+                                             <div class="col-md-12"> <p>Singer: {{albuminfo.data.album[0].strArtist}}</p></div>
+                                         </div>
+                                         <div class="row">
+                                         <div class="col-md-12"> <p>Release date: {{albuminfo.data.album[0].intYearReleased}}</p>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                         <div class="col-md-12"> <p ng-if="albuminfo.data.album[0].intScore != null">Score: {{albuminfo.data.album[0].intScore}}</p>
+                                             </div>
+                                         </div>
+                                 </div>
+                                 <div class="col-md-9">
+                                     <div class="row">
+                                     <p ng-if="albuminfo.data.album[0].strDescriptionEN != null">
+                                         {{albuminfo.data.album[0].strDescriptionEN}}
+                                     </p>
+                                     <p ng-if="albuminfo.data.album[0].strDescriptionEN == null">
+                                         Details not available at this moment.
+                                     </p>
+                                     </div>
+                                     <div class="row">
+                                          <table class="table table_class" id="tableDiv" style="min-width:600px;">
+                                            <tr>
+                                              <th>Track</th>
+                                              <!--<th>Duration</th>-->
+                                            </tr>
+                                              <tr ng-repeat="track in tracksinfo.data.track">
+                                                <td> {{track.strTrack}}</td>
+                                                <!--<td>{{track.intDuration}}</td>-->
+                                            </tr>
+                                        </table>
+                                     </div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="Artists" class="tabcontent container carousel slide" data-ride="carousel" data-interval="false">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" id="tabbing_head">
+                          <div class="header_subtitle well well-sm">
+                                <h4 id="lbH" style="display:inline-block;">Artists</h4>
+                                <input id="artistEntry" type="text" id="search_id" ng-model="searchArtist" class="search_box" placeholder="Search" ng-keyup="$event.keyCode == 13 ? changeArtist() : null"/>
+                                <button id="artistSearch" type="submit" value="Submit" class="btn btn-primary search_box" ng-click="changeArtist()">Search</button>              
+                            </div>
+
+                            <table class="table table_class" id="tableDiv" style="min-width:600px;">
+                                <tr>
+                                  <th>Album</th>
+                                  <th>Artist</th>
+                                  <th>Style</th>
+                                  <th>Genre</th>
+                                  <th>Release Date</th>
+                                    <th>Image</th>
+                                  <th></th>
+                               </tr>
+                                 <tr ng-repeat="album in artistdata.data.album | orderBy: '-intYearReleased'">
+                                    <td  ng-click="elementClick(album.idAlbum)" class="carousel-control details" href="#Artists"  value="View Details" role="button" data-slide="next" >{{album.strAlbum}}</td>
+                                     <td> {{album.strArtist}}</td>
+                                    <td>{{album.strStyle}}</td>
+                                    <td>{{album.strGenre}}</td>
+                                    <td>{{album.intYearReleased}}</td>
+                                     <td><img src="{{album.strAlbumThumb}}" style="height: 50px;" alt="..."/></td>
+                                </tr>
+                            </table>
+                        </div>
+                         <div class="carousel-item">
+                             <div class="row">
+                                 <div class="col-md-3">
+                                     <button id="back_Bt" href="#Artists" style="border: 1px solid;" class="btn btn-outline-danger back_button carousel-control btn_look bghover" ng-click="back()" role="button" data-slide="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+                                 </div>
+                                 <div class="col-md-9">
+                                     <h1> Album: {{albuminfo.data.album[0].strAlbum}}</h1>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-3">
+                                     <div class="row" >
+                                        <img src="{{albuminfo.data.album[0].strAlbumThumb}}" style="height: 250px;" alt="..."/>
+                                     </div>
+                                         <div class="row">
+                                             <div class="col-md-12"> <p>Singer: {{albuminfo.data.album[0].strArtist}}</p></div>
+                                         </div>
+                                         <div class="row">
+                                         <div class="col-md-12"> <p>Release date: {{albuminfo.data.album[0].intYearReleased}}</p>
+                                             </div>
+                                         </div>
+                                         <div class="row">
+                                         <div class="col-md-12"> <p ng-if="albuminfo.data.album[0].intScore != null">Score: {{albuminfo.data.album[0].intScore}}</p>
+                                             </div>
+                                         </div>
+                                 </div>
+                                 <div class="col-md-9">
+                                     <div class="row">
+                                     <p ng-if="albuminfo.data.album[0].strDescriptionEN != null">
+                                         {{albuminfo.data.album[0].strDescriptionEN}}
+                                     </p>
+                                     <p ng-if="albuminfo.data.album[0].strDescriptionEN == null">
+                                         Details not available at this moment.
+                                     </p>
+                                     </div>
+                                     <div class="row">
+                                          <table class="table table_class" id="tableDiv" style="min-width:600px;">
+                                            <tr>
+                                              <th>Track</th>
+                                              <!--<th>Duration</th>-->
+                                            </tr>
+                                              <tr ng-repeat="track in tracksinfo.data.track">
+                                                <td> {{track.strTrack}}</td>
+                                                <!--<td>{{track.intDuration}}</td>-->
+                                            </tr>
+                                        </table>
+                                     </div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <!-- </form>-->
+    </body>
+</html>
